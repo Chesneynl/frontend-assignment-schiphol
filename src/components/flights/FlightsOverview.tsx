@@ -1,8 +1,8 @@
-import Select from "@components/ui/Select";
+import { Select } from "@components/ui";
 import { useState } from "react";
-import { sortAndLimitFlights } from "utils/helpers/flights";
-import { Flight, FlightSort } from "utils/types/flights";
-import FlightsCard from "./FlightCard";
+import { sortAndLimitFlights } from "@helpers/flights";
+import type { Flight, FlightSort } from "utils/types/flights";
+import { FlightCard } from "@components/flights";
 
 type Props = {
     flights: Flight[] | null;
@@ -51,7 +51,7 @@ function FlightsOverview({ destination, flights }: Props) {
             </div>
             <div className="gap-4 md:grid md:grid-cols-3">
                 {sortedFlights.map(flight => (
-                    <FlightsCard key={flight.flightIdentifier} flight={flight} />
+                    <FlightCard key={flight.flightIdentifier} flight={flight} />
                 ))}
             </div>
         </div>

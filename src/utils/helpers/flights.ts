@@ -1,4 +1,4 @@
-import { Flight, FlightSort } from "utils/types/flights";
+import type { Flight, FlightSort } from "utils/types/flights";
 
 function sortDate(a: string, b: string) {
     const dateA = new Date(a);

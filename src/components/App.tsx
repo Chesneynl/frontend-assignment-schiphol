@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { SearchFlightsForm, FlightsOverview } from "@components/flights";
-import { Flight } from "utils/types/flights";
+import { Flight } from "utils/helpers2/flights";
 
 function App() {
     const [flights, setFlights] = useState<Flight[] | null>(null);

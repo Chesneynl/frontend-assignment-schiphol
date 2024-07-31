@@ -13,10 +13,7 @@ type Props = {
 function Select({ label, name, required, options, value, onChange }: Props) {
     return (
         <div className="w-full">
-            <label
-                htmlFor={name}
-                className="text-md mb-2 block font-medium text-gray-900 dark:text-white"
-            >
+            <label htmlFor={name} className="text-md mb-2 block font-medium text-gray-900">
                 {label}
             </label>
             <select

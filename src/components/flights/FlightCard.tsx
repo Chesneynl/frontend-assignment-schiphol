@@ -5,7 +5,7 @@ type Props = {
     flight: Flight;
 };
 
-function FlightsCard({ flight }: Props) {
+function FlightCard({ flight }: Props) {
     const {
         flightIdentifier,
         expectedTime,
@@ -44,4 +44,4 @@ function FlightsCard({ flight }: Props) {
     );
 }
 
-export default FlightsCard;
+export default FlightCard;
