@@ -1,17 +1,25 @@
 # How to install
 
-`yarn install`
+```
+yarn install
+```
 
 # How to run
 
-`yarn dev`
-`yarn backend`
+```
+yarn dev
+yarn install
+```
 
 # How to build and start the build
 
-`yarn build`
-`yarn preview`
+```
+yarn build
+yarn preview
+```
 
 # How to test 
 
-`yarn test`
+```
+yarn test
+```

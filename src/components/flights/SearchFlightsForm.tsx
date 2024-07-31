@@ -1,8 +1,8 @@
+import debounce from "lodash/debounce";
+
 import { useMemo, useState } from "react";
 import { Input } from "@components/ui";
 import type { Flight } from "utils/types/flights";
-
-import debounce from "lodash/debounce";
 
 type Props = {
     destination: string;
