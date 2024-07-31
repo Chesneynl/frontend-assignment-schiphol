@@ -1,5 +1,5 @@
 import { Link } from "@components/ui";
-import { Flight } from "utils/types/flights";
+import type { Flight } from "utils/types/flights";
 
 type Props = {
     flight: Flight;
