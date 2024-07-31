@@ -3,18 +3,12 @@ import { SearchFlightsForm, FlightsOverview } from "@components/flights";
 import type { Flight } from "utils/types/flights";
 
 function App() {
-    const [flights, setFlights] = useState<Flight[] | null>(null);
-    const [destination, setDestination] = useState<string>("");
+    const [filteredFlights, setFilteredFlights] = useState<Flight[] | null>(null);
 
     return (
         <>
-            <SearchFlightsForm
-                setFlights={setFlights}
-                flights={flights}
-                destination={destination}
-                setDestination={setDestination}
-            />
-            <FlightsOverview flights={flights} destination={destination} />
+            <SearchFlightsForm setFilteredFlights={setFilteredFlights} />
+            <FlightsOverview filteredFlights={filteredFlights} />
         </>
     );
 }

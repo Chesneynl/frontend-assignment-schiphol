@@ -5,22 +5,17 @@ import type { Flight, FlightSort } from "utils/types/flights";
 import { FlightCard } from "@components/flights";
 
 type Props = {
-    flights: Flight[] | null;
-    destination: string;
+    filteredFlights: Flight[] | null;
 };
 
-function FlightsOverview({ destination, flights }: Props) {
+function FlightsOverview({ filteredFlights }: Props) {
     const [sort, setSort] = useState<FlightSort>("date");
 
-    if (!flights) return null;
-
-    const filteredFlights = flights.filter((flight: Flight) =>
-        flight.airport.toLowerCase().includes(destination.toLowerCase())
-    );
+    if (!filteredFlights) return null;
 
     if (filteredFlights.length === 0) {
         return (
-            <div className="mx-auto pt-5 md:max-w-4xl">
+            <div className="mx-auto mt-5 text-center md:max-w-4xl">
                 <p>Geen vluchten gevonden</p>
             </div>
         );
@@ -51,7 +46,7 @@ function FlightsOverview({ destination, flights }: Props) {
             </div>
             <div className="gap-4 md:grid md:grid-cols-3">
                 {sortedFlights.map(flight => (
-                    <FlightCard key={flight.flightIdentifier} flight={flight} />
+                    <FlightCard key={`${sort}-${flight.flightIdentifier}`} flight={flight} />
                 ))}
             </div>
         </div>

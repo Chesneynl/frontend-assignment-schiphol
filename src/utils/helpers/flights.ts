@@ -29,7 +29,7 @@ export const sortAndLimitFlights = (
     order = "asc",
     maxFlights = 5
 ) => {
-    return flights
+    return [...flights]
         .sort((a: Flight, b: Flight) => {
             let comparison = 0;
 
@@ -43,3 +43,11 @@ export const sortAndLimitFlights = (
         })
         .slice(0, maxFlights);
 };
+
+export function filterFlightsByDestination(flights: Flight[], destination: string) {
+    if (!destination) return [];
+
+    return flights.filter((flight: Flight) =>
+        flight.airport.toLowerCase().includes(destination.toLowerCase())
+    );
+}

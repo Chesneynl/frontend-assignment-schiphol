@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { sortAndLimitFlights } from "./flights";
+import { filterFlightsByDestination, sortAndLimitFlights } from "./flights";
 
 const originalFlights = [
     {
@@ -122,5 +122,36 @@ describe("sortAndLimitFlights", () => {
             const flights = [...originalFlights];
             expect(sortAndLimitFlights(flights, "date", "asc", 6)).toHaveLength(6);
         });
+    });
+});
+
+describe("filterFlightsByDestination", () => {
+    it("should return flights with matching destination (case insensitive)", () => {
+        const result = filterFlightsByDestination([...originalFlights], "London Gatwick");
+        expect(result).toHaveLength(3);
+        expect(result).toEqual([
+            originalFlights[0], // London Gatwick
+            originalFlights[4], // London Gatwick
+            originalFlights[5] // London Gatwick
+        ]);
+    });
+
+    it("should return flights with matching destination (case insensitive)", () => {
+        const result = filterFlightsByDestination([...originalFlights], "london heathrow");
+        expect(result).toHaveLength(2);
+        expect(result).toEqual([
+            originalFlights[1], // London Heathrow
+            originalFlights[3] // London Heathrow
+        ]);
+    });
+
+    it("should return an empty array if no flights match the destination", () => {
+        const result = filterFlightsByDestination([...originalFlights], "Paris");
+        expect(result).toHaveLength(0);
+    });
+
+    it("should return an empty array if destination is an empty string", () => {
+        const result = filterFlightsByDestination([...originalFlights], "");
+        expect(result).toHaveLength(0);
     });
 });

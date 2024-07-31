@@ -3,25 +3,31 @@ import debounce from "lodash/debounce";
 import { useMemo, useState } from "react";
 import { Input } from "@components/ui";
 import type { Flight } from "utils/types/flights";
+import { filterFlightsByDestination } from "@helpers/flights";
 
 type Props = {
-    destination: string;
-    flights: Flight[] | null;
-    setDestination: (destination: string) => void;
-    setFlights: (flights: Flight[] | null) => void;
+    setFilteredFlights: (flights: Flight[] | null) => void;
 };
 
-function SearchFlightsForm({ destination, flights, setDestination, setFlights }: Props) {
+function SearchFlightsForm({ setFilteredFlights }: Props) {
     const [hasError, setHasError] = useState(false);
+    const [destination, setDestination] = useState("");
+    const [flights, setFlights] = useState<Flight[] | null>(null);
 
     const debouncedFetchData = useMemo(
         () =>
-            debounce(() => {
+            debounce((searchQuery: string) => {
                 fetch("/flights.json", {
                     method: "GET"
                 })
                     .then(response => response.json())
                     .then(result => {
+                        const filteredFlights = filterFlightsByDestination(
+                            result.flights,
+                            searchQuery
+                        );
+                        setFilteredFlights(filteredFlights);
+
                         setFlights(result.flights);
                         setHasError(false);
                     })
@@ -38,8 +44,13 @@ function SearchFlightsForm({ destination, flights, setDestination, setFlights }:
 
         setDestination(searchQuery);
 
-        if (searchQuery.length > 2 && !flights) {
-            debouncedFetchData();
+        if (searchQuery.length < 3) return;
+
+        if (!flights) {
+            debouncedFetchData(searchQuery);
+        } else {
+            const filteredFlights = filterFlightsByDestination(flights, searchQuery);
+            setFilteredFlights(filteredFlights);
         }
     };
 
