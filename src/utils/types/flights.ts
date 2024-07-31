@@ -9,4 +9,4 @@ export type Flight = {
     score: string;
 };
 
-export type FlightSort = 'date' | 'expectedTime';
+export type FlightSort = "date" | "expectedTime";

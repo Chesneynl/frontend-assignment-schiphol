@@ -1,40 +1,60 @@
-import { Flight } from 'utils/types/flights';
+import Select from "@components/ui/Select";
+import { useState } from "react";
+import { sortAndLimitFlights } from "utils/helpers/flights";
+import { Flight, FlightSort } from "utils/types/flights";
+import FlightsCard from "./FlightCard";
 
 type Props = {
     flights: Flight[] | null;
+    destination: string;
 };
 
-function FlightsOverview({ flights }: Props) {
+function FlightsOverview({ destination, flights }: Props) {
+    const [sort, setSort] = useState<FlightSort>("date");
+
     if (!flights) return null;
 
-    if (flights.length === 0) {
+    const filteredFlights = flights.filter((flight: Flight) =>
+        flight.airport.toLowerCase().includes(destination.toLowerCase())
+    );
+
+    if (filteredFlights.length === 0) {
         return (
-            <div>
+            <div className="mx-auto pt-5 md:max-w-4xl">
                 <p>Geen vluchten gevonden</p>
             </div>
         );
     }
 
-    return (
-        <>
-            {flights.map((flight) => {
-                const { flightIdentifier, expectedTime, score, flightNumber, airport, date, url } = flight;
+    const sortedFlights = sortAndLimitFlights(filteredFlights, sort);
 
-                return (
-                    <div
-                        key={flightIdentifier}
-                        className="p-5 border border-gray-200 dark:border-gray-700 rounded-md mb-5 bg-gradient-more"
-                    >
-                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">{flightNumber}</h2>
-                        <p className="text-md text-gray-700 dark:text-gray-300">{expectedTime}</p>
-                        <p className="text-md text-gray-700 dark:text-gray-300">{airport}</p>
-                        <p className="text-md text-gray-700 dark:text-gray-300">{date}</p>
-                        <p className="text-md text-gray-700 dark:text-gray-300">{url}</p>
-                        <p className="text-md text-gray-700 dark:text-gray-300">{score}</p>
-                    </div>
-                );
-            })}
-        </>
+    return (
+        <div className="mx-auto mt-5 flex flex-col gap-3 px-5 md:max-w-4xl">
+            <div className="flex max-w-96">
+                <Select
+                    label="Sorteer op"
+                    name="sort"
+                    options={[
+                        {
+                            value: "date",
+                            label: "Datum"
+                        },
+                        {
+                            value: "time",
+                            label: "Tijd"
+                        }
+                    ]}
+                    value={sort}
+                    onChange={e => setSort(e.target.value as FlightSort)}
+                    required
+                />
+            </div>
+            <div className="gap-4 md:grid md:grid-cols-3">
+                {sortedFlights.map(flight => (
+                    <FlightsCard key={flight.flightIdentifier} flight={flight} />
+                ))}
+            </div>
+        </div>
     );
 }
 

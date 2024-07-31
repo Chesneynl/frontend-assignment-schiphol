@@ -1,34 +1,45 @@
-import { Flight, FlightSort } from 'utils/types/flights';
+import { Flight, FlightSort } from "utils/types/flights";
 
-export const sortFlights = (flights: Flight[], key: FlightSort, order = 'asc', maxFlights = 5) => {
+function sortDate(a: string, b: string) {
+    const dateA = new Date(a);
+    const dateB = new Date(b);
+
+    if (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime())) {
+        return dateA.getTime() - dateB.getTime();
+    }
+
+    return 0;
+}
+
+function sortTime(a: string, b: string) {
+    const timeToMinutes = (time: string): number => {
+        const [hours, minutes] = time.split(":").map(Number);
+        return hours * 60 + minutes;
+    };
+
+    const timeA = timeToMinutes(a);
+    const timeB = timeToMinutes(b);
+
+    return timeA - timeB;
+}
+
+export const sortAndLimitFlights = (
+    flights: Flight[],
+    key: FlightSort,
+    order = "asc",
+    maxFlights = 5
+) => {
     return flights
-        .sort((a, b) => {
-            const valueA = a[key];
-            const valueB = b[key];
-
+        .sort((a: Flight, b: Flight) => {
             let comparison = 0;
 
-            if (key === 'date') {
-                const dateA = new Date(valueA);
-                const dateB = new Date(valueB);
-
-                if (!isNaN(dateA.getTime()) && !isNaN(dateB.getTime())) {
-                    comparison = dateA.getTime() - dateB.getTime();
-                }
+            if (key === "date") {
+                comparison = sortDate(a[key], b[key]);
+            } else if (key === "expectedTime") {
+                comparison = sortTime(a[key], b[key]);
             }
 
-            if (key === 'expectedTime') {
-                const timeToMinutes = (time: string): number => {
-                    const [hours, minutes] = time.split(':').map(Number);
-                    return hours * 60 + minutes;
-                };
-                const timeA = timeToMinutes(valueA);
-                const timeB = timeToMinutes(valueB);
-
-                comparison = timeA - timeB;
-            }
-
-            return order === 'asc' ? comparison : -comparison;
+            return order === "asc" ? comparison : -comparison;
         })
         .slice(0, maxFlights);
 };
